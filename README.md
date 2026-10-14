@@ -1,48 +1,51 @@
 # ArchForge
 
-ArchForge is an AI agent that converts AWS architecture design documents into AWS CDK infrastructure code in Python.
+> **Status:** Just started. I have a clear goal, but the details will be decided and checked step by step as I build.
 
-The project is also being developed as an AI engineering learning project, with a focus on agentic systems, RAG, MCP, AWS infrastructure automation, validation, evaluation, and safe deployment workflows.
+## 1. Project Goal
 
-## Description
+Build an AI agent that reads an AWS architecture design and creates the AWS infrastructure for it using code (AWS CDK in Python). The agent also tests that the infrastructure works.
 
-The goal of ArchForge is to take a high-level architecture design, understand the required AWS resources and relationships, generate AWS CDK code, validate the generated infrastructure, and prepare it for deployment through a controlled GitHub-based workflow.
+This is also my self-improvement project to learn AI, RAG and MCP.
 
-The agent must not have direct production AWS credentials.
+## 2. Current Version Scope (Version 1)
 
-The intended deployment workflow is:
+Keep it small:
 
-Architecture Document
-        ↓
-AI Agent
-        ↓
-AWS CDK Code
-        ↓
-Validation
-        ↓
-GitHub Pull Request
-        ↓
-Human Review / Approval
-        ↓
-GitHub Actions
-        ↓
-AWS
+- One simple architecture only: **Lambda + API Gateway + DynamoDB**
+- The AI agent creates the CDK code and checks it
+- A human approves at two places (see the workflow)
+- The infrastructure is deployed to AWS
+- The AI agent tests the deployed infrastructure (for example: is the Lambda giving the correct response?) and tells me if it works as expected
 
-The initial proof of concept will focus on:
+Not in Version 1: bigger architectures (VPC, ECS, RDS), and anything extra.
 
-- AWS Lambda
-- Amazon API Gateway
-- Amazon DynamoDB
+## 3. Full Workflow
 
-The project will start narrow and expand gradually.
+1. I give the architecture design to the AI agent.
+2. The agent understands it and writes the CDK code.
+3. The agent checks the code for errors.
+4. **Human approval 1:** I review and approve the CDK code.
+5. The agent creates a new branch, adds the code, and raises a Pull Request (PR) on GitHub.
+6. **Human approval 2:** I review the PR, approve it, and merge it to the `main` branch.
+7. GitHub Actions starts automatically and creates the stack in AWS.
+8. The AI agent gets a signal that the stack is deployed (or I tell it that the PR is merged).
+9. The agent tests the architecture, for example whether the Lambda gives a proper response.
+10. The agent gives me the result: working as expected or not.
 
-## Project Documentation
+**Rule:** The AI agent never gets direct AWS credentials. Only GitHub Actions deploys to AWS.
 
-The `docs/` directory contains the project's research and daily learning history.
+## 4. Technical Stack
 
-```text
-docs/
-└── daily/
-    ├── YYYY-MM-DD.md
-    ├── YYYY-MM-DD.md
-    └── ...
+- Python
+- uv
+- Git
+- GitHub
+- VS Code (IDE)
+
+More tools (for RAG, LLM and MCP) will be added when I reach those steps.
+
+## 5. Taking Help From
+
+- Claude
+- ChatGPT
