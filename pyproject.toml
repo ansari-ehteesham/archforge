@@ -1,7 +1,7 @@
 [project]
 name = "archforge"
 version = "0.1.0"
-description = "Add your description here"
+description = "AI agent that turns AWS architecture designs into CDK infrastructure"
 readme = "README.md"
 authors = [
     { name = "Ansari Ehteesham Aqeel", email = "an.ehteesham@gmail.com" }
