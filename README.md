@@ -42,6 +42,7 @@ Not in Version 1: bigger architectures (VPC, ECS, RDS), and anything extra.
 - Git
 - GitHub
 - VS Code (IDE)
+- Chroma DB
 
 More tools (for RAG, LLM and MCP) will be added when I reach those steps.
 
@@ -49,3 +50,13 @@ More tools (for RAG, LLM and MCP) will be added when I reach those steps.
 
 - Claude
 - ChatGPT
+
+## 6. Commands
+
+There are following commands which will help to run the project
+
+1. If you want to run the RAG end-to-end pipeline (Collection -> Cleaning -> Converting -> Storing) then run the below command
+
+```cmd
+uv run archforge --pipeline RAG --rerun true
+```
