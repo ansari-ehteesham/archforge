@@ -1,2 +1,7 @@
+from archforge.rag.fetcher import HTMLFetcher
+
 def main():
-    return "Welcome To The ArchForge Project"
+    
+    print("Welcome To The ArchForge Project")
+    fetch = HTMLFetcher()
+    fetch.orchestrate()
