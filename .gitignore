@@ -25,7 +25,6 @@ env/
 Thumbs.db
 
 # ArchForge local data
-data/
 workspaces/
 
 # Chroma
