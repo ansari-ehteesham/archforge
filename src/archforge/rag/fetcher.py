@@ -2,21 +2,13 @@
 This File contain the code for the HTML File Fetching
 """
 
-from archforge.utils import read_json, save
+from archforge.utils import save
 import requests
 
 
 class HTMLFetcher:
-    def __init__(self):
-        self.aws_services = read_json(
-            file_path="src/archforge/rag/config.json",
-            query="aws_cdk_api.api_references_url.*",
-        )
-        
-        self.html_save_path = read_json(
-            file_path="src/archforge/rag/config.json",
-            query="upload_folder"
-        ).get("raw_html")
+    def __init__(self, save_path):
+        self.html_save_path = save_path
 
     def fetch(self, url) -> str:
         """
@@ -38,19 +30,19 @@ class HTMLFetcher:
         except Exception as exc:
             raise str(exc)
 
-    def orchestrate(self):
+    def orchestrate(self, aws_service):
         """
         This method is just an push button for the fetcher to work
         """
-        
-        for i, service in enumerate(self.aws_services, start=0):
-            print(f"URL - {service.get("url")}")
-            print(f"Service Name and It's File Name - {service.get("file_name")}")
-            
-            html = self.fetch(url=service.get("url"))
-            htmlFile = save(file_path=f"{self.html_save_path}/{service.get("file_name")}", data=html, extension="html")
-            
-            print(htmlFile)
-            
-        print(f"Completed all {i} services")
-        return True
+
+        print(f"URL - {aws_service.get("url")}")
+        print(f"Service Name and It's File Name - {aws_service.get("file_name")}")
+
+        html = self.fetch(url=aws_service.get("url"))
+        htmlFile = save(
+            file_path=f"{self.html_save_path}/{aws_service.get("file_name")}",
+            data=html,
+            extension="html",
+        )
+
+        print(htmlFile)
