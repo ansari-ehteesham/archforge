@@ -4,6 +4,7 @@ This Python File contain different helper or common function
 
 from glom import glom
 import json
+import os
 
 
 def read_json(file_path, query: str = "*"):
@@ -19,17 +20,26 @@ def read_json(file_path, query: str = "*"):
     result = glom(target=json_data, spec=query)
     return result
 
-def save(file_path, data, extension:str):
+def save(file_dir, file_name, data, extension:str):
         """
         This function save the different format file
         
-        file_path: Relative path of the file
+        file_dir: File Directory
+        file_name: file name which need to saved
         data: data which we need to save in the file
         extension: file extension (Do not include '.')
         """
         
-        with open(f"{file_path}.{extension}", "w", encoding="utf-8") as html_file:
+        file_path_exists = os.path.exists(path=file_dir)
+        
+        if not file_path_exists:
+            print(f"File Directory Doesn't exists. So, creating one - {file_dir}")
+            os.mkdir(path=file_dir)
+        
+        file_path = os.path.join(file_dir, f"{file_name}.{extension}")
+        
+        with open(file_path, "w", encoding="utf-8") as html_file:
             html_file.write(data)
             html_file.close()
             
-        return f"File Saved Succussfully in {file_path}.{extension}"
+        return f"File Saved Succussfully in {file_path}"

@@ -4,11 +4,13 @@ This File contain the code for the HTML File Fetching
 
 from archforge.utils import save
 import requests
+from requests.exceptions import Timeout, HTTPError, ConnectionError
 
 
 class HTMLFetcher:
-    def __init__(self, save_path):
+    def __init__(self, save_path, prog_lang):
         self.html_save_path = save_path
+        self.cdk_prog_lang = prog_lang
 
     def fetch(self, url) -> str:
         """
@@ -18,17 +20,23 @@ class HTMLFetcher:
         """
 
         try:
-            response = requests.get(url=url)
+            query_param = {"lang": self.cdk_prog_lang}
 
+            response = requests.get(url=url, params=query_param, timeout=5)
+
+            response.raise_for_status()
+            
             if response.status_code == 200:
                 print(f"HTML File Retrived from {url}")
                 return response.text
-            else:
-                print(
-                    f"Unable to retrive the HTML File\nStatus Code - {response.status_code}"
-                )
+        except Timeout:
+            print("Error: Request Timeout. The server took long time to response")
+        except ConnectionError:
+            print("Error: Network issue or DNS failure. Check your Internet Connection")
+        except HTTPError as http_error:
+            print(f"Error: HTTP Error Occured - {http_error}")
         except Exception as exc:
-            raise str(exc)
+            print(f"An unexpected error occured - {exc}")
 
     def orchestrate(self, aws_service):
         """
@@ -40,7 +48,8 @@ class HTMLFetcher:
 
         html = self.fetch(url=aws_service.get("url"))
         htmlFile = save(
-            file_path=f"{self.html_save_path}/{aws_service.get("file_name")}",
+            file_dir=self.html_save_path,
+            file_name=aws_service.get("file_name"),
             data=html,
             extension="html",
         )

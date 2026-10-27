@@ -4,15 +4,15 @@
         "cdk_version": "v2",
         "api_references_url": {
             "lambda": {
-                "url": "https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_lambda-readme.html?lang=python",
+                "url": "https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_lambda-readme.html",
                 "file_name": "lambda"
             },
             "dynamodb": {
-                "url": "https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_dynamodb-readme.html?lang=python",
+                "url": "https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_dynamodb-readme.html",
                 "file_name": "dynamodb"
             },
             "apigateway": {
-                "url": "https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_apigateway-readme.html?lang=python",
+                "url": "https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_apigateway-readme.html",
                 "file_name": "apigateway"
             }
         },
@@ -20,7 +20,8 @@
             "lambda",
             "dynamodb",
             "apigateway"
-        ]
+        ],
+        "programming_language": "python"
     },
     "upload_folder": {
         "raw_html": "data/raw_html",

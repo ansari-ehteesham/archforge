@@ -4,24 +4,36 @@ This File is used to run the RAG Pipeline from Collection -> Cleaning -> Convert
 
 from archforge.rag.fetcher import HTMLFetcher
 from archforge.utils import read_json
+from pathlib import Path
 
 
 class RAGOrchestrator:
+
+    ROOT_DIR = Path(__file__).resolve().parent
+    CONFIG_FILE = ROOT_DIR / "config.json"
+
     def __init__(self):
         self.aws_services = read_json(
-            file_path="src/archforge/rag/config.json",
+            file_path=self.CONFIG_FILE,
             query="aws_cdk_api.api_references_url.*",
         )
 
         self.html_save_path = read_json(
-            file_path="src/archforge/rag/config.json", query="upload_folder"
+            file_path=self.CONFIG_FILE, query="upload_folder"
         ).get("raw_html")
 
         self.preprocess_md_save_path = read_json(
-            file_path="src/archforge/rag/config.json", query="upload_folder"
+            file_path=self.CONFIG_FILE, query="upload_folder"
         ).get("processed_md")
 
-        self.html_fetcher = HTMLFetcher(save_path=self.html_save_path)
+        self.cdk_programming_language = read_json(
+            file_path=self.CONFIG_FILE,
+            query="aws_cdk_api.programming_language",
+        )
+
+        self.html_fetcher = HTMLFetcher(
+            save_path=self.html_save_path, prog_lang=self.cdk_programming_language
+        )
 
     def pipeline(self):
         """

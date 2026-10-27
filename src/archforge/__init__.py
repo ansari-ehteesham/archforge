@@ -11,6 +11,7 @@ def parse_args():
         "--pipeline",
         type=str,
         required=True,
+        choices=["RAG"],
         help="Name of the pipeline to run (e.g., RAG)",
     )
 
