@@ -65,8 +65,8 @@ class HTMLPostProcessing:
         processed_html_file = save(
             file_dir=self.processed_html_file,
             file_name=os.path.basename(html_file_path),
-            data=str(step_02_result),
+            data=step_02_result,
             extension="html"
         )
         
-        return processed_html_file
+        return step_02_result

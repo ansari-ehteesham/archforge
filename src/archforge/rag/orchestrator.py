@@ -4,6 +4,7 @@ This File is used to run the RAG Pipeline from Collection -> Cleaning -> Convert
 
 from archforge.rag.fetcher import HTMLFetcher
 from archforge.rag.html_post_processing import HTMLPostProcessing
+from archforge.rag.convertor import Convertor
 from archforge.utils import read_json
 from pathlib import Path
 
@@ -44,6 +45,10 @@ class RAGOrchestrator:
             process_html_path=self.process_html_save_path,
             prog_lang=self.cdk_programming_language,
         )
+        
+        self.html_to_md_convertor = Convertor(
+            md_file_path=self.preprocess_md_save_path
+        )
 
     def pipeline(self):
         """
@@ -60,3 +65,6 @@ class RAGOrchestrator:
 
             # Cleaning the saved HTML File
             processed_html = self.html_processing.orchestrator(save_file_path)
+            
+            # Converting the Processed HTML File into Markdown File and Saving it
+            md_convert_file = self.html_to_md_convertor.orchestrator(processed_html, service.get("file_name"))
