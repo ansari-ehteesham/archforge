@@ -22,7 +22,7 @@ class HTMLFetcher:
         try:
             query_param = {"lang": self.cdk_prog_lang}
 
-            response = requests.get(url=url, params=query_param, timeout=5)
+            response = requests.get(url=url, params=query_param, timeout=10)
 
             response.raise_for_status()
             
@@ -30,13 +30,13 @@ class HTMLFetcher:
                 print(f"HTML File Retrived from {url}")
                 return response.text
         except Timeout:
-            print("Error: Request Timeout. The server took long time to response")
+            raise Timeout("Error: Request Timeout. The server took long time to response")
         except ConnectionError:
-            print("Error: Network issue or DNS failure. Check your Internet Connection")
+            raise ConnectionError("Error: Network issue or DNS failure. Check your Internet Connection")
         except HTTPError as http_error:
-            print(f"Error: HTTP Error Occured - {http_error}")
+            raise HTTPError(f"Error: HTTP Error Occured - {http_error}")
         except Exception as exc:
-            print(f"An unexpected error occured - {exc}")
+            raise Exception(f"An unexpected error occured - {exc}")
 
     def orchestrate(self, aws_service):
         """
