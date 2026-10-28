@@ -2,7 +2,7 @@
 This file contain the process of converting the Processed HTML File in the MarkDown File
 """
 
-from html_to_markdown import convert
+from html_to_markdown import convert, ConversionOptions
 from archforge.utils import save
 
 class Convertor:
@@ -16,7 +16,11 @@ class Convertor:
         html_file: Processed HTML File Path
         """
         if isinstance(processed_html, str):
-            result = convert(html=processed_html)
+            OPTIONS = ConversionOptions(
+                compact_tables=True,
+                code_language="python"
+            )
+            result = convert(html=processed_html, options=OPTIONS)
         else:
             raise TypeError(f"Processed HTML is not wrapped in String. Type = {type(processed_html)}")
         

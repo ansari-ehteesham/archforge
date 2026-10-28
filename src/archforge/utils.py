@@ -40,7 +40,7 @@ def save(file_dir, file_name, data, extension:str):
         
         file_path = os.path.join(file_dir, f"{file_name}.{extension}")
         
-        with open(file_path, "w", encoding="utf-8") as html_file:
+        with open(file_path, "w", encoding="utf-8", newline="\n") as html_file:
             html_file.write(data)
             html_file.close()
             

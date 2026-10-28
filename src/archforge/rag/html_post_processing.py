@@ -20,6 +20,10 @@ class HTMLPostProcessing:
         for div in lang_variants:
             if div.get("data-lang") != self.prog_lang:
                 div.decompose()
+                
+        # remove the python heading also
+        for span in soup.find_all("span", class_="lang"):
+            span.decompose()
 
         return soup
 
