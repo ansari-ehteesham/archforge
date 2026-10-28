@@ -25,6 +25,7 @@
     },
     "upload_folder": {
         "raw_html": "data/raw_html",
+        "process_html": "data/process_html",
         "processed_md": "data/processed_md"
     }
 }

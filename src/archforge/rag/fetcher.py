@@ -54,4 +54,4 @@ class HTMLFetcher:
             extension="html",
         )
 
-        print(htmlFile)
+        return htmlFile

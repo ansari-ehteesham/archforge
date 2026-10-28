@@ -36,10 +36,12 @@ def save(file_dir, file_name, data, extension:str):
             print(f"File Directory Doesn't exists. So, creating one - {file_dir}")
             os.mkdir(path=file_dir)
         
+        file_name, _ = os.path.splitext(file_name)
+        
         file_path = os.path.join(file_dir, f"{file_name}.{extension}")
         
         with open(file_path, "w", encoding="utf-8") as html_file:
             html_file.write(data)
             html_file.close()
             
-        return f"File Saved Succussfully in {file_path}"
+        return file_path

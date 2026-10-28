@@ -3,6 +3,7 @@ This File is used to run the RAG Pipeline from Collection -> Cleaning -> Convert
 """
 
 from archforge.rag.fetcher import HTMLFetcher
+from archforge.rag.html_post_processing import HTMLPostProcessing
 from archforge.utils import read_json
 from pathlib import Path
 
@@ -22,6 +23,10 @@ class RAGOrchestrator:
             file_path=self.CONFIG_FILE, query="upload_folder"
         ).get("raw_html")
 
+        self.process_html_save_path = read_json(
+            file_path=self.CONFIG_FILE, query="upload_folder"
+        ).get("process_html")
+
         self.preprocess_md_save_path = read_json(
             file_path=self.CONFIG_FILE, query="upload_folder"
         ).get("processed_md")
@@ -35,6 +40,11 @@ class RAGOrchestrator:
             save_path=self.html_save_path, prog_lang=self.cdk_programming_language
         )
 
+        self.html_processing = HTMLPostProcessing(
+            process_html_path=self.process_html_save_path,
+            prog_lang=self.cdk_programming_language,
+        )
+
     def pipeline(self):
         """
         This is the main method which will invoke all the steps in the RAG Pipeline
@@ -43,5 +53,10 @@ class RAGOrchestrator:
         """
 
         for i, service in enumerate(self.aws_services):
-            print(f"{"="*10} Step {i+1} {"="*10}")
-            step_01_result = self.html_fetcher.orchestrate(aws_service=service)
+            print(f"{"="*10} Service {i+1} {"="*10}")
+
+            # Fecthing adn saving the HTML File with Python as Language
+            save_file_path = self.html_fetcher.orchestrate(aws_service=service)
+
+            # Cleaning the saved HTML File
+            processed_html = self.html_processing.orchestrator(save_file_path)
