@@ -34,7 +34,7 @@ def save(file_dir, file_name, data, extension:str):
         
         if not file_path_exists:
             print(f"File Directory Doesn't exists. So, creating one - {file_dir}")
-            os.mkdir(path=file_dir)
+            os.makedirs(path=file_dir, exist_ok=True)
         
         file_name, _ = os.path.splitext(file_name)
         
