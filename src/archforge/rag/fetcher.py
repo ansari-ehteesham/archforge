@@ -28,7 +28,7 @@ class HTMLFetcher:
             
             if response.status_code == 200:
                 print(f"HTML File Retrived from {url}")
-                return response.text
+                return response.text, response.url, response.headers.get('Date')
         except Timeout:
             raise Timeout("Error: Request Timeout. The server took long time to response")
         except ConnectionError:
@@ -46,7 +46,7 @@ class HTMLFetcher:
         print(f"URL - {aws_service.get("url")}")
         print(f"Service Name and It's File Name - {aws_service.get("file_name")}")
 
-        html = self.fetch(url=aws_service.get("url"))
+        html, url, datetime = self.fetch(url=aws_service.get("url"))
         htmlFile = save(
             file_dir=self.html_save_path,
             file_name=aws_service.get("file_name"),
@@ -54,4 +54,4 @@ class HTMLFetcher:
             extension="html",
         )
 
-        return htmlFile
+        return htmlFile, url, datetime

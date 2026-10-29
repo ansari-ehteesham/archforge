@@ -61,10 +61,10 @@ class RAGOrchestrator:
             print(f"{"="*10} Service {i+1} {"="*10}")
 
             # Fecthing adn saving the HTML File with Python as Language
-            save_file_path = self.html_fetcher.orchestrate(aws_service=service)
+            save_file_path, url, datetime = self.html_fetcher.orchestrate(aws_service=service)
 
             # Cleaning the saved HTML File
             processed_html = self.html_processing.orchestrator(save_file_path)
             
             # Converting the Processed HTML File into Markdown File and Saving it
-            md_convert_file = self.html_to_md_convertor.orchestrator(processed_html, service.get("file_name"))
+            md_convert_file = self.html_to_md_convertor.orchestrator(processed_html, service.get("file_name"), url, datetime)
