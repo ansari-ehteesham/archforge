@@ -23,7 +23,8 @@ class HTMLFetcher:
             query_param = {"lang": self.cdk_prog_lang}
 
             response = requests.get(url=url, params=query_param, timeout=10)
-
+            
+            response.encoding = "utf-8"
             response.raise_for_status()
             
             if response.status_code == 200:
