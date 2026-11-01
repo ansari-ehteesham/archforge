@@ -5,6 +5,7 @@ This File is used to run the RAG Pipeline from Collection -> Cleaning -> Convert
 from archforge.rag.fetcher import HTMLFetcher
 from archforge.rag.html_post_processing import HTMLPostProcessing
 from archforge.rag.convertor import Convertor
+from archforge.rag.chunker import Chunker
 from archforge.utils import read_json
 from pathlib import Path
 
@@ -36,6 +37,11 @@ class RAGOrchestrator:
             file_path=self.CONFIG_FILE,
             query="aws_cdk_api.programming_language",
         )
+        
+        self.chunk_detail = read_json(
+            file_path=self.CONFIG_FILE,
+            query="docs_chunk",
+        )
 
         self.html_fetcher = HTMLFetcher(
             save_path=self.html_save_path, prog_lang=self.cdk_programming_language
@@ -48,6 +54,11 @@ class RAGOrchestrator:
         
         self.html_to_md_convertor = Convertor(
             md_file_path=self.preprocess_md_save_path
+        )
+        
+        self.chunker = Chunker(
+            chunk_size=self.chunk_detail.get("size"),
+            overlap_size=self.chunk_detail.get("overlap")
         )
 
     def pipeline(self):
@@ -68,3 +79,6 @@ class RAGOrchestrator:
             
             # Converting the Processed HTML File into Markdown File and Saving it
             md_convert_file = self.html_to_md_convertor.orchestrator(processed_html, service.get("file_name"), url, datetime)
+            
+            # Chunking the MD file data
+            chunk_json = self.chunker.start_chunking(md_file_path=md_convert_file)
