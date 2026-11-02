@@ -43,7 +43,6 @@ class Chunker:
                 lst_of_chunks.append(data[i:])
                 i += len(data[i:])
 
-        print(f"There are total {len(lst_of_chunks)} chunks")
         return lst_of_chunks
 
     def extract_metadata(self, data_type, data):
@@ -110,7 +109,6 @@ class Chunker:
         return headers
 
     def packing(self, data):
-        # print(json.dumps(data, indent=4))
         temp = ""
         content = []
         for i, block in enumerate(data.get("content")):
@@ -159,6 +157,5 @@ class Chunker:
         for i, data in enumerate(self.chunk_json.get("data")):
             self.chunk_json.get("data")[i]["content"] = self.packing(data=data)
             self.chunk_json.get("data")[i]["metadata"] = data.get("header")
-            print(f"Data - {json.dumps(data, indent=4)}")
 
         return self.chunk_json
