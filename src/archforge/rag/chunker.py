@@ -112,8 +112,6 @@ class Chunker:
         temp = ""
         content = []
         for i, block in enumerate(data.get("content")):
-            if i == 0 and block:
-                block = data.get("header") + block
             if block:
                 if len(temp + block) <= self.chunk_size:
                     temp += block
@@ -129,6 +127,8 @@ class Chunker:
                 continue
         if temp:
             content.append(temp)
+        
+        content = [f"{data.get("header")}\n\n{chunk.strip("\n")}" for chunk in content]
         return content
 
     def start_chunking(self, md_file_path):
