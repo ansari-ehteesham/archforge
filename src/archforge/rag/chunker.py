@@ -147,11 +147,13 @@ class Chunker:
             self.chunk_json["fetched"] = extract_file_metadata.get("fetched")
 
         lst_header_section = self.extract_text(data=data)
+        
+        # Remove the empty content section
+        lst_header_section = [s for s in lst_header_section if s["content"]] 
 
         if lst_header_section:
             self.chunk_json["data"] = lst_header_section
 
-        # print(json.dumps(self.chunk_json["data"][0], indent=4))
 
         # Now, let's get the finalised data
         for i, data in enumerate(self.chunk_json.get("data")):
