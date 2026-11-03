@@ -6,8 +6,12 @@ from archforge.rag.fetcher import HTMLFetcher
 from archforge.rag.html_post_processing import HTMLPostProcessing
 from archforge.rag.convertor import Convertor
 from archforge.rag.chunker import Chunker
+from archforge.rag.store import StoreDB
 from archforge.utils import read_json
 from pathlib import Path
+
+
+import json
 
 
 class RAGOrchestrator:
@@ -37,10 +41,20 @@ class RAGOrchestrator:
             file_path=self.CONFIG_FILE,
             query="aws_cdk_api.programming_language",
         )
-        
+
         self.chunk_detail = read_json(
             file_path=self.CONFIG_FILE,
             query="docs_chunk",
+        )
+
+        self.embedding_model = read_json(
+            file_path=self.CONFIG_FILE,
+            query="embedding_model",
+        )
+
+        self.chromadb_config = read_json(
+            file_path=self.CONFIG_FILE,
+            query="chromadb",
         )
 
         self.html_fetcher = HTMLFetcher(
@@ -51,14 +65,18 @@ class RAGOrchestrator:
             process_html_path=self.process_html_save_path,
             prog_lang=self.cdk_programming_language,
         )
-        
-        self.html_to_md_convertor = Convertor(
-            md_file_path=self.preprocess_md_save_path
-        )
-        
+
+        self.html_to_md_convertor = Convertor(md_file_path=self.preprocess_md_save_path)
+
         self.chunker = Chunker(
             chunk_size=self.chunk_detail.get("size"),
-            overlap_size=self.chunk_detail.get("overlap")
+            overlap_size=self.chunk_detail.get("overlap"),
+        )
+
+        self.storedb = StoreDB(
+            embedding_model_config=self.embedding_model,
+            store_path=self.ROOT_DIR,
+            chromadb_config=self.chromadb_config,
         )
 
     def pipeline(self):
@@ -72,13 +90,26 @@ class RAGOrchestrator:
             print(f"{"="*10} Service {i+1} {"="*10}")
 
             # Fecthing adn saving the HTML File with Python as Language
-            save_file_path, url, datetime = self.html_fetcher.orchestrate(aws_service=service)
+            save_file_path, url, datetime = self.html_fetcher.orchestrate(
+                aws_service=service
+            )
 
             # Cleaning the saved HTML File
             processed_html = self.html_processing.orchestrator(save_file_path)
-            
+
             # Converting the Processed HTML File into Markdown File and Saving it
-            md_convert_file = self.html_to_md_convertor.orchestrator(processed_html, service.get("file_name"), url, datetime)
-            
+            md_convert_file = self.html_to_md_convertor.orchestrator(
+                processed_html, service.get("file_name"), url, datetime
+            )
+
             # Chunking the MD file data
             chunk_json = self.chunker.start_chunking(md_file_path=md_convert_file)
+
+            # Flattening the Data into a proper list.
+            flatten_data = self.storedb.flatten_data(data=chunk_json)
+            print(
+                f"There are {len(flatten_data)} number of chunks"
+            )
+
+        # Now, we have one flatten_data which include all the services chunks
+        collection_data = self.storedb.store_data(data=flatten_data)

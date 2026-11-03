@@ -31,5 +31,14 @@
     "docs_chunk": {
         "size": 1000,
         "overlap": 150
+    },
+    "embedding_model": {
+        "model_name": "gemini-embedding-001",
+        "model_task": "RETRIEVAL_DOCUMENT",
+        "output_dimension": 3072
+    },
+    "chromadb": {
+        "collection_name": "cdk-docs",
+        "folder_name": "chromadb"
     }
 }
