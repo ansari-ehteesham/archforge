@@ -9,10 +9,7 @@ from archforge.rag.chunker import Chunker
 from archforge.rag.store import StoreDB
 from archforge.utils import read_json
 from pathlib import Path
-
-
 import json
-
 
 class RAGOrchestrator:
 
@@ -113,3 +110,16 @@ class RAGOrchestrator:
 
         # Now, we have one flatten_data which include all the services chunks
         collection_data = self.storedb.store_data(data=flatten_data)
+        
+        if not collection_data:
+            raise RuntimeError("Stored count does not match the number of chunks")
+        
+    def query(self, query):
+        """
+        This method is used for querying the RAG Database
+        
+        query: str - User Query will come
+        """
+        
+        result = self.storedb.query(query)
+        print(f"This is the result of the Query -\n{json.dumps(result, indent=4)}")

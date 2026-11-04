@@ -1,0 +1,17 @@
+[
+  {
+    "query": "How do I create a Lambda-based request authorizer for API Gateway RestApi?",
+    "expected_service": "apigateway",
+    "expected_keywords": ["RequestAuthorizer", "RestApi", "handler"]
+  },
+  {
+    "query": "How do I configure a DynamoDB table with point-in-time recovery and global replicas using TableV2?",
+    "expected_service": "dynamodb",
+    "expected_keywords": ["TableV2", "pointInTimeRecoverySpecification", "replicas"]
+  },
+  {
+    "query": "How do I add an execution role and configure timeout for an AWS Lambda function?",
+    "expected_service": "lambda",
+    "expected_keywords": ["Function", "role", "timeout"]
+  }
+]

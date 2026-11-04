@@ -1,6 +1,5 @@
 from archforge.rag.orchestrator import RAGOrchestrator
 import argparse
-import sys
 
 
 def parse_args():
@@ -22,6 +21,14 @@ def parse_args():
         default=False,
         help="Whether to force a rerun (True/False)",
     )
+    
+    # Handling the Query argument
+    parser.add_argument(
+        "--query",
+        type=str,
+        required=False,
+        help="Enter the Query to search in RAG DB"
+    )
 
     return parser.parse_args()
 
@@ -34,8 +41,15 @@ def main():
     print(f"Running pipeline: {args.pipeline}")
     print(f"Rerun enabled: {args.rerun} (type: {type(args.rerun).__name__})")
 
-    if args.pipeline == "RAG" and args.rerun:
-        RAGOrchestrator().pipeline()
+    if args.pipeline == "RAG":
+        if args.rerun:
+            print(f"Running the whole RAG Pipeline")
+            RAGOrchestrator().pipeline()
+        elif args.query:
+            print(f"User Query - {args.query}")
+            RAGOrchestrator().query(args.query)
+        else:
+            print('Nothing to do. Use --rerun true to build the DB, or --query "..." to search.')
 
 
 if __name__ == "__main__":

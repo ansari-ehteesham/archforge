@@ -5,6 +5,7 @@ This Python File contain different helper or common function
 from glom import glom
 import json
 import os
+import time
 
 
 def read_json(file_path, query: str = "*"):
@@ -45,3 +46,16 @@ def save(file_dir, file_name, data, extension:str):
             html_file.close()
             
         return file_path
+    
+def countdown_time(wait_time):
+    """
+    This is the function which show a countdown timer on the terminal
+    
+    wait_time: int - in seconds
+    """
+    
+    for i in range(0, wait_time):
+        print(f"\rTime Remaning: {wait_time - i} s", end=" ", flush=True)
+        time.sleep(1)
+        
+    print("\nTimes Up !!!")
